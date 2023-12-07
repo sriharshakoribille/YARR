@@ -37,12 +37,16 @@ class IndependentEnvRunner(EnvRunner):
                  max_fails: int = 10,
                  num_eval_runs: int = 1,
                  env_device: torch.device = None,
-                 multi_task: bool = False):
+                 multi_task: bool = False,
+                 dense_clip_sims=None,
+                 no_rgb=None):
             super().__init__(train_env, agent, train_replay_buffer, num_train_envs, num_eval_envs,
                             rollout_episodes, eval_episodes, training_iterations, eval_from_eps_number,
                             episode_length, eval_env, eval_replay_buffer, stat_accumulator,
                             rollout_generator, weightsdir, logdir, max_fails, num_eval_runs,
                             env_device, multi_task)
+            self._dense_clip_sims = dense_clip_sims
+            self._no_rgb = no_rgb
 
     def summaries(self) -> List[Summary]:
         summaries = []
@@ -101,7 +105,9 @@ class IndependentEnvRunner(EnvRunner):
                 headless=env_config[5],
                 include_lang_goal_in_obs=env_config[6],
                 time_in_state=env_config[7],
-                record_every_n=env_config[8])
+                record_every_n=env_config[8],
+                dense_clip_sims=self._dense_clip_sims,
+                no_rgb=self._no_rgb)
 
         self._internal_env_runner = _IndependentEnvRunner(
             self._train_env, eval_env, self._agent, self._timesteps, self._train_envs,
