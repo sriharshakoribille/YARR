@@ -94,7 +94,9 @@ class IndependentEnvRunner(EnvRunner):
                 swap_task_every=env_config[6],
                 include_lang_goal_in_obs=env_config[7],
                 time_in_state=env_config[8],
-                record_every_n=env_config[9])
+                record_every_n=env_config[9],
+                dense_clip_sims=self._dense_clip_sims,
+                no_rgb=self._no_rgb)
         else:
             eval_env = CustomRLBenchEnv(
                 task_class=env_config[0],
